@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MY School | مدرستي... بأيدينا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & THEMING
+       ========================================================================== */
+    :root {
+      --yellow: #FACC15;
+      --yellow-hover: #EAB308;
+      --yellow-soft: rgba(250, 204, 21, 0.16);
+      --navy-950: #0A1330;
+      --navy-900: #111E45;
+      --navy-800: #16264F;
+      --success: #10B981;
+      --success-soft: rgba(16, 185, 129, 0.14);
+      --danger: #EF4444;
+      --danger-soft: rgba(239, 68, 68, 0.14);
+
+      --bg: #F4F6FB;
+      --surface: #FFFFFF;
+      --surface-alt: #F8FAFC;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --shadow: 0 10px 25px -5px rgba(10, 19, 48, 0.06), 0 4px 10px -6px rgba(10, 19, 48, 0.04);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --sidebar-w: 270px;
+      --topbar-h: 68px;
+      --bottombar-h: 72px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #070D21;
+      --surface: #0F1A3A;
+      --surface-alt: #15234B;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: #1E3163;
+      --shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.45);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ==========================================================================
+       2. BASE & RESET
+       ========================================================================== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', Tahoma, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, textarea, select {
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: inherit;
+    }
+    button { cursor: pointer; border: none; background: none; }
+    :focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 2px;
+    }
+
+    /* ==========================================================================
+       3. AUTH SCREEN
+       ========================================================================== */
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: radial-gradient(circle at top right, var(--navy-800), var(--navy-950) 70%);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+    }
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .brand-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      direction: ltr;
+      display: inline-block;
+    }
+    .brand-title span { color: var(--yellow); }
+    .brand-tagline {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .brand-sponsor {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      opacity: 0.85;
+    }
+    .mode-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .mode-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--surface-alt);
+      padding: 6px;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--navy-900);
+      color: #FFFFFF;
+    }
+    [data-theme="dark"] .tab-btn.active {
+      background: var(--yellow);
+      color: var(--navy-950);
+    }
+
+    /* ==========================================================================
+       4. FORMS & BUTTONS
+       ========================================================================== */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      border-color: var(--yellow);
+      outline: none;
+    }
+    textarea.form-control { min-height: 96px; resize: vertical; }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .checkbox-label input { width: 18px; height: 18px; accent-color: var(--navy-900); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      transition: 0.2s;
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--navy-950);
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--yellow-hover); }
+    .btn-navy {
+      background: var(--navy-900);
+      color: #FFFFFF;
+    }
+    .btn-navy:hover:not(:disabled) { background: var(--navy-800); }
+    .btn-ghost {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--text-muted); }
+    .btn-danger {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+    .btn-danger:hover:not(:disabled) { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 6px 12px; font-size: 0.84rem; }
+    .btn-block { width: 100%; }
+    .link-btn {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: underline;
+      margin-top: 12px;
+      display: inline-block;
+    }
+
+    /* ==========================================================================
+       5. APP SHELL (DESKTOP SIDEBAR & MOBILE BOTTOM BAR)
+       ========================================================================== */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: var(--sidebar-w);
+      background: linear-gradient(180deg, var(--navy-950), var(--navy-900));
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      z-index: 40;
+    }
+    .sidebar-brand {
+      padding: 0 10px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+    .sidebar-brand .brand-title { font-size: 1.65rem; color: #FFFFFF; }
+    .sidebar-brand .brand-tagline { color: rgba(255, 255, 255, 0.7); font-size: 0.85rem; }
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      color: rgba(255, 255, 255, 0.78);
+      font-weight: 700;
+      text-align: right;
+      transition: 0.2s;
+    }
+    .nav-btn:hover { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+    .nav-btn.active {
+      background: var(--yellow);
+      color: var(--navy-950);
+    }
+    .nav-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 12px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius-md);
+      margin-top: 16px;
+    }
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--yellow);
+      color: var(--navy-950);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sidebar-user-info { overflow: hidden; }
+    .sidebar-user-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-user-role {
+      font-size: 0.78rem;
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    .main-area {
+      flex: 1;
+      margin-right: var(--sidebar-w);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--topbar-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 30;
+    }
+    .page-title { font-size: 1.3rem; font-weight: 800; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn:hover { border-color: var(--yellow); }
+
+    .content-container {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+    }
+
+    .bottom-nav { display: none; }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main-area { margin-right: 0; padding-bottom: calc(var(--bottombar-h) + env(safe-area-inset-bottom)); }
+      .topbar { padding: 0 16px; }
+      .content-container { padding: 20px 16px 32px; }
+      .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: calc(var(--bottombar-h) + env(safe-area-inset-bottom));
+        padding-bottom: env(safe-area-inset-bottom);
+        background: var(--navy-950);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        z-index: 50;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .bottom-nav .nav-btn {
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px 6px;
+        font-size: 0.72rem;
+        border-radius: var(--radius-sm);
+        flex: 1;
+        align-items: center;
+      }
+      .bottom-nav .nav-btn.active {
+        background: transparent;
+        color: var(--yellow);
+      }
+    }
+
+    /* ==========================================================================
+       6. CARDS, GRIDS & COMPONENTS
+       ========================================================================== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .card-title { font-size: 1.1rem; font-weight: 800; }
+
+    .hero-card {
+      background: linear-gradient(135deg, var(--navy-950), var(--navy-800));
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .hero-greeting { font-size: 1.55rem; font-weight: 800; }
+    .hero-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .pill-yellow { background: var(--yellow); color: var(--navy-950); }
+    .pill-success { background: var(--success-soft); color: var(--success); }
+    .pill-danger { background: var(--danger-soft); color: var(--danger); }
+    .pill-navy { background: var(--navy-800); color: #FFFFFF; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 650px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat-label { font-size: 0.88rem; color: var(--text-muted); font-weight: 700; }
+    .stat-value { font-size: 1.85rem; font-weight: 800; margin-top: 4px; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+    @media (max-width: 820px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* Timeline & Lessons */
+    .lesson-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .lesson-item.is-now {
+      border-color: var(--yellow);
+      background: var(--yellow-soft);
+    }
+    .lesson-item.is-done { opacity: 0.72; }
+    .lesson-idx {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--navy-900);
+      color: #FFFFFF;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .lesson-item.is-done .lesson-idx { background: var(--success); }
+    .lesson-info { flex: 1; min-width: 0; }
+    .lesson-subj { font-weight: 800; font-size: 1rem; }
+    .lesson-teacher { font-size: 0.85rem; color: var(--text-muted); }
+    .lesson-time {
+      font-weight: 700;
+      font-size: 0.86rem;
+      direction: ltr;
+      white-space: nowrap;
+    }
+
+    /* Day Tabs */
+    .day-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+    .day-tab {
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .day-tab.active {
+      background: var(--navy-900);
+      color: #FFFFFF;
+      border-color: var(--navy-900);
+    }
+    [data-theme="dark"] .day-tab.active {
+      background: var(--yellow);
+      color: var(--navy-950);
+      border-color: var(--yellow);
+    }
+
+    /* Homework */
+    .hw-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .hw-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: 0.15s;
+    }
+    .hw-check.checked {
+      background: var(--success);
+      border-color: var(--success);
+      color: #FFFFFF;
+    }
+    .hw-body { flex: 1; min-width: 0; }
+    .hw-subj {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--navy-950);
+      font-weight: 800;
+      font-size: 0.76rem;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }
+    .hw-title { font-weight: 700; }
+    .hw-item.completed .hw-title { text-decoration: line-through; opacity: 0.7; }
+    .hw-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    /* Announcements */
+    .post-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .post-card.pinned { border-right: 5px solid var(--yellow); }
+    .post-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .post-author { display: flex; align-items: center; gap: 10px; }
+    .post-title { font-size: 1.12rem; font-weight: 800; margin-bottom: 6px; }
+    .post-body { white-space: pre-wrap; color: var(--text); font-size: 0.95rem; }
+
+    /* Table & Profile */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: right; }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    th { font-size: 0.84rem; color: var(--text-muted); font-weight: 800; }
+    .kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .kv-tile {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+    .kv-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 700; }
+    .kv-val { font-size: 1.15rem; font-weight: 800; margin-top: 2px; }
+
+    /* Alerts, Empty States & Toast */
+    .error-banner {
+      background: var(--danger-soft);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .toast-container {
+      position: fixed;
+      bottom: 88px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+      width: min(92vw, 420px);
+    }
+    .toast {
+      background: var(--navy-950);
+      color: #FFFFFF;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-right: 5px solid var(--success);
+      text-align: center;
+    }
+    .toast.error { border-right-color: var(--danger); }
+    .loader-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-weight: 700;
+    }
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border: 4px solid var(--border);
+      border-top-color: var(--yellow);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    details summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 8px 0;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toasts" class="toast-container" aria-live="polite"></div>
+
+  <!-- Firebase Compat SDK v10.7.1 via jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.1/firebase-app-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.1/firebase-database-compat.js"></script>
+
+  <script>
+    /* ==========================================================================
+       1. CONFIG & CONSTANTS
+       ========================================================================== */
+    // Switch between 'firebase' and 'local' for offline testing
+    const MODE = 'firebase';
+
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyDPdU1gZnftD7SIxhzLc5T4SvOk2XA2quc",
+      authDomain: "shatapp-7a74f.firebaseapp.com",
+      databaseURL: "https://shatapp-7a74f-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "shatapp-7a74f",
+      storageBucket: "shatapp-7a74f.firebasestorage.app",
+      messagingSenderId: "678711834086",
+      appId: "1:678711834086:web:df8f5eb5aeb21ad7279227"
+    };
+
+    const DAYS = [
+      { key: 'Sunday', label: 'الأحد' },
+      { key: 'Monday', label: 'الإثنين' },
+      { key: 'Tuesday', label: 'الثلاثاء' },
+      { key: 'Wednesday', label: 'الأربعاء' },
+      { key: 'Thursday', label: 'الخميس' },
+      { key: 'Friday', label: 'الجمعة' },
+      { key: 'Saturday', label: 'السبت' }
+    ];
+
+    const ICONS = {
+      home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10.5z"/></svg>`,
+      bell: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
+      calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+      book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+      shield: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+      user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`,
+      sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`,
+      moon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+      check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>`,
+      trash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>`,
+      pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`
+    };
+
+    /* ==========================================================================
+       2. APPLICATION STATE & HELPERS
+       ========================================================================== */
+    const state = {
+      authReady: false,
+      authUser: null,
+      profile: null,
+      authTab: 'signin', // 'signin' | 'signup'
+      route: 'home',     // 'home' | 'posts' | 'schedule' | 'homework' | 'admin' | 'profile'
+      adminTab: 'users', // 'users' | 'stats'
+      selectedDay: DAYS[new Date().getDay()].key,
+      selectedClass: '',
+      posts: {},
+      homework: {},
+      schedule: {},
+      hwDone: {},
+      users: {},
+      listenerErrors: [],
+      busy: false,
+      unsubs: []
+    };
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getInitials(name) {
+      const parts = (name || 'م').trim().split(/\s+/);
+      return parts.slice(0, 2).map(p => p[0]).join('');
+    }
+
+    function formatDateAr(ts) {
+      return new Intl.DateTimeFormat('ar-EG', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      }).format(new Date(ts));
+    }
+
+    function formatDateTimeAr(ts) {
+      return new Intl.DateTimeFormat('ar-EG', {
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      }).format(new Date(ts));
+    }
+
+    function formatNumAr(n) {
+      return new Intl.NumberFormat('ar-EG').format(n || 0);
+    }
+
+    function calcLevel(xp) {
+      return Math.floor((xp || 0) / 100) + 1;
+    }
+
+    function parseMinutes(hhmm) {
+      if (!hhmm || !hhmm.includes(':')) return -1;
+      const [h, m] = hhmm.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function getNowMinutes() {
+      const d = new Date();
+      return d.getHours() * 60 + d.getMinutes();
+    }
+
+    function isValidClassName(cls) {
+      return /^[\u0600-\u06FFa-zA-Z0-9\s\/\-]{1,30}$/.test((cls || '').trim());
+    }
+
+    function mapError(err) {
+      console.error('MY School Error:', err);
+      const code = err?.code || err?.message || '';
+      if (code.includes('PERMISSION_DENIED') || code.includes('permission-denied')) {
+        return 'ليس لديك صلاحية لهذا الإجراء';
+      }
+      const authMap = {
+        'auth/invalid-email': 'البريد الإلكتروني غير صحيح.',
+        'auth/email-already-in-use': 'هذا البريد مسجّل بالفعل. جرّب تسجيل الدخول أو استعادة كلمة السر.',
+        'auth/weak-password': 'كلمة السر ضعيفة، يجب أن تكون 6 أحرف على الأقل.',
+        'auth/invalid-credential': 'البريد الإلكتروني أو كلمة السر غير صحيحة.',
+        'auth/user-not-found': 'لا يوجد حساب مسجّل بهذا البريد.',
+        'auth/wrong-password': 'كلمة السر غير صحيحة.',
+        'auth/too-many-requests': 'محاولات كثيرة جداً. يرجى الانتظار قليلاً ثم المحاولة مرة أخرى.',
+        'auth/network-request-failed': 'تعذّر الاتصال بالشبكة. تأكد من اتصالك بالإنترنت.',
+        'auth/operation-not-allowed': 'تسجيل الدخول بالبريد الإلكتروني غير مفعّل في إعدادات المشروع.',
+        'auth/unauthorized-domain': 'نطاق الموقع غير مصرح به في إعدادات Firebase Auth.'
+      };
+      for (const [k, msg] of Object.entries(authMap)) {
+        if (code.includes(k)) return msg;
+      }
+      return err?.message || 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى.';
+    }
+
+    function showToast(message, type = 'success') {
+      const box = document.getElementById('toasts');
+      const el = document.createElement('div');
+      el.className = `toast ${type === 'error' ? 'error' : ''}`;
+      el.textContent = message;
+      box.appendChild(el);
+      setTimeout(() => el.remove(), 3800);
+    }
+
+    /* ==========================================================================
+       3. THEME MANAGEMENT
+       ========================================================================== */
+    function initTheme() {
+      const saved = localStorage.getItem('myschool_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('myschool_theme', next);
+      render();
+    }
+
+    /* ==========================================================================
+       4. BACKEND ABSTRACTION (FIREBASE + LOCAL FALLBACK)
+       ========================================================================== */
+    async function sha256(str) {
+      if (window.crypto && window.crypto.subtle) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+      // Simple deterministic fallback if crypto.subtle is unavailable
+      let h = 2166136261;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+      }
+      return (h >>> 0).toString(16);
+    }
+
+    function createBackend() {
+      if (MODE === 'firebase') {
+        if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+        const auth = firebase.auth();
+        const db = firebase.database();
+
+        return {
+          auth: {
+            onChange: (cb) => auth.onAuthStateChanged(cb),
+            signIn: (email, pass) => auth.signInWithEmailAndPassword(email, pass),
+            signUp: async (email, pass, profileData) => {
+              const cred = await auth.createUserWithEmailAndPassword(email, pass);
+              const uid = cred.user.uid;
+              try {
+                await db.ref(`users/${uid}`).set({
+                  name: profileData.name,
+                  email: email,
+                  className: profileData.className,
+                  role: 'student',
+                  xp: 0,
+                  createdAt: Date.now()
+                });
+                return cred.user;
+              } catch (writeErr) {
+                // Rollback auth user if DB profile creation fails
+                try { await cred.user.delete(); } catch (_) {}
+                throw writeErr;
+              }
+            },
+            signOut: () => auth.signOut(),
+            reset: (email) => auth.sendPasswordResetEmail(email)
+          },
+          db: {
+            on: (path, onVal, onErr) => {
+              const ref = db.ref(path);
+              const cb = (snap) => onVal(snap.val());
+              ref.on('value', cb, onErr);
+              return () => ref.off('value', cb);
+            },
+            get: async (path) => (await db.ref(path).once('value')).val(),
+            set: (path, val) => db.ref(path).set(val),
+            push: (path, val) => db.ref(path).push(val),
+            remove: (path) => db.ref(path).remove(),
+            transaction: (path, updater) => db.ref(path).transaction(updater)
+          }
+        };
+      }
+
+      // LOCAL MODE IMPLEMENTATION
+      const DB_KEY = 'myschool_local_db';
+      const SESSION_KEY = 'myschool_local_session';
+      const listeners = [];
+      let authCb = null;
+
+      function readStore() {
+        try {
+          return JSON.parse(localStorage.getItem(DB_KEY)) || {
+            _creds: {}, users: {}, posts: {}, homework: {}, schedule: {}, hwDone: {}
+          };
+        } catch {
+          return { _creds: {}, users: {}, posts: {}, homework: {}, schedule: {}, hwDone: {} };
+        }
+      }
+
+      function getByPath(obj, path) {
+        if (!path) return obj;
+        return path.split('/').filter(Boolean).reduce((acc, k) => (acc ? acc[k] : null), obj) ?? null;
+      }
+
+      function setByPath(obj, path, val) {
+        const parts = path.split('/').filter(Boolean);
+        let cur = obj;
+        for (let i = 0; i < parts.length - 1; i++) {
+          if (!cur[parts[i]] || typeof cur[parts[i]] !== 'object') cur[parts[i]] = {};
+          cur = cur[parts[i]];
+        }
+        const last = parts[parts.length - 1];
+        if (val === null) delete cur[last];
+        else cur[last] = val;
+      }
+
+      function writeStore(data) {
+        localStorage.setItem(DB_KEY, JSON.stringify(data));
+        listeners.forEach(l => l.onVal(getByPath(data, l.path)));
+      }
+
+      return {
+        auth: {
+          onChange: (cb) => {
+            authCb = cb;
+            const sess = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+            setTimeout(() => cb(sess), 50);
+            return () => { authCb = null; };
+          },
+          signIn: async (email, pass) => {
+            const store = readStore();
+            const hash = await sha256(pass);
+            const entry = Object.entries(store._creds).find(([, v]) => v.email === email && v.hash === hash);
+            if (!entry) throw { code: 'auth/invalid-credential' };
+            const user = { uid: entry[0], email };
+            localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+            if (authCb) authCb(user);
+            return user;
+          },
+          signUp: async (email, pass, profileData) => {
+            const store = readStore();
+            if (Object.values(store._creds).some(v => v.email === email)) {
+              throw { code: 'auth/email-already-in-use' };
+            }
+            const uid = 'local_' + Date.now();
+            const isFirstUser = Object.keys(store.users).length === 0;
+            store._creds[uid] = { email, hash: await sha256(pass) };
+            store.users[uid] = {
+              name: profileData.name,
+              email,
+              className: profileData.className,
+              role: isFirstUser ? 'admin' : 'student',
+              xp: 0,
+              createdAt: Date.now()
+            };
+            writeStore(store);
+            const user = { uid, email };
+            localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+            if (authCb) authCb(user);
+            return user;
+          },
+          signOut: async () => {
+            localStorage.removeItem(SESSION_KEY);
+            if (authCb) authCb(null);
+          },
+          reset: async () => {
+            throw new Error('استعادة كلمة السر غير متاحة في الوضع المحلي (Local Mode).');
+          }
+        },
+        db: {
+          on: (path, onVal) => {
+            const item = { path, onVal };
+            listeners.push(item);
+            setTimeout(() => onVal(getByPath(readStore(), path)), 20);
+            return () => {
+              const idx = listeners.indexOf(item);
+              if (idx > -1) listeners.splice(idx, 1);
+            };
+          },
+          get: async (path) => getByPath(readStore(), path),
+          set: async (path, val) => {
+            const store = readStore();
+            setByPath(store, path, val);
+            writeStore(store);
+          },
+          push: async (path, val) => {
+            const store = readStore();
+            const id = 'id_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+            setByPath(store, `${path}/${id}`, val);
+            writeStore(store);
+          },
+          remove: async (path) => {
+            const store = readStore();
+            setByPath(store, path, null);
+            writeStore(store);
+          },
+          transaction: async (path, updater) => {
+            const store = readStore();
+            const cur = getByPath(store, path);
+            const next = updater(cur);
+            setByPath(store, path, next);
+            writeStore(store);
+          }
+        }
+      };
+    }
+
+    const backend = createBackend();
+
+    /* ==========================================================================
+       5. DATA SUBSCRIPTIONS & AUTH LIFECYCLE
+       ========================================================================== */
+    function clearSubscriptions() {
+      state.unsubs.forEach(fn => { try { fn(); } catch (_) {} });
+      state.unsubs = [];
+      state.listenerErrors = [];
+    }
+
+    function addListenerError(source, err) {
+      const msg = mapError(err);
+      if (!state.listenerErrors.some(e => e.msg === msg)) {
+        state.listenerErrors.push({ source, msg });
+      }
+      render();
+    }
+
+    function startSubscriptions(uid) {
+      clearSubscriptions();
+      let usersSubActive = false;
+
+      // 1. Own User Profile
+      state.unsubs.push(
+        backend.db.on(`users/${uid}`, (prof) => {
+          if (!prof) {
+            addListenerError('profile', new Error('تعذّر العثور على بيانات الحساب في قاعدة البيانات.'));
+            return;
+          }
+          state.profile = prof;
+          if (!state.selectedClass) state.selectedClass = prof.className || '';
+
+          // Subscribe to all users if admin
+          if (prof.role === 'admin' && !usersSubActive) {
+            usersSubActive = true;
+            state.unsubs.push(
+              backend.db.on('users', (allUsers) => {
+                state.users = allUsers || {};
+                render();
+              }, (err) => addListenerError('users', err))
+            );
+          }
+          render();
+        }, (err) => addListenerError('profile', err))
+      );
+
+      // 2. Homework completion
+      state.unsubs.push(
+        backend.db.on(`hwDone/${uid}`, (val) => {
+          state.hwDone = val || {};
+          render();
+        }, (err) => addListenerError('hwDone', err))
+      );
+
+      // 3. Posts / Announcements
+      state.unsubs.push(
+        backend.db.on('posts', (val) => {
+          state.posts = val || {};
+          render();
+        }, (err) => addListenerError('posts', err))
+      );
+
+      // 4. Homework
+      state.unsubs.push(
+        backend.db.on('homework', (val) => {
+          state.homework = val || {};
+          render();
+        }, (err) => addListenerError('homework', err))
+      );
+
+      // 5. Schedule
+      state.unsubs.push(
+        backend.db.on('schedule', (val) => {
+          state.schedule = val || {};
+          render();
+        }, (err) => addListenerError('schedule', err))
+      );
+    }
+
+    backend.auth.onChange((user) => {
+      state.authReady = true;
+      state.authUser = user;
+      if (user) {
+        startSubscriptions(user.uid);
+      } else {
+        clearSubscriptions();
+        state.profile = null;
+        state.posts = {};
+        state.homework = {};
+        state.schedule = {};
+        state.hwDone = {};
+        state.users = {};
+      }
+      render();
+    });
+
+    /* ==========================================================================
+       6. WRITES & ACTIONS
+       ========================================================================== */
+    const isAdmin = () => state.profile?.role === 'admin';
+
+    async function handleToggleHomework(hwId) {
+      const uid = state.authUser.uid;
+      const alreadyDone = !!state.hwDone[hwId];
+      try {
+        if (alreadyDone) {
+          await backend.db.remove(`hwDone/${uid}/${hwId}`);
+          await backend.db.transaction(`users/${uid}/xp`, (cur) => Math.max(0, (cur || 0) - 10));
+          showToast('تم إلغاء إتمام الواجب (-10 XP)');
+        } else {
+          await backend.db.set(`hwDone/${uid}/${hwId}`, true);
+          await backend.db.transaction(`users/${uid}/xp`, (cur) => (cur || 0) + 10);
+          showToast('أحسنت! تم إنجاز الواجب (+10 XP)');
+        }
+      } catch (err) {
+        showToast(mapError(err), 'error');
+      }
+    }
+
+    async function handleCreatePost(form) {
+      const title = form.title.value.trim();
+      const body = form.body.value.trim();
+      const pinned = form.pinned.checked;
+      if (!title) return showToast('يرجى إدخال عنوان الإعلان', 'error');
+
+      await backend.db.push('posts', {
+        title,
+        body,
+        author: state.profile.name,
+        authorUid: state.authUser.uid,
+        ts: Date.now(),
+        pinned
+      });
+      form.reset();
+      showToast('تم نشر الإعلان بنجاح');
+    }
+
+    async function handleTogglePin(postId, currentPinned) {
+      try {
+        await backend.db.set(`posts/${postId}/pinned`, !currentPinned);
+        showToast(!currentPinned ? 'تم تثبيت الإعلان' : 'تم إلغاء التثبيت');
+      } catch (err) {
+        showToast(mapError(err), 'error');
+      }
+    }
+
+    async function handleDeletePost(postId) {
+      if (!confirm('هل أنت متأكد من حذف هذا الإعلان؟')) return;
+      try {
+        await backend.db.remove(`posts/${postId}`);
+        showToast('تم حذف الإعلان');
+      } catch (err) {
+        showToast(mapError(err), 'error');
+      }
+    }
+
+    async function handleAddLesson(form) {
+      const cls = (state.selectedClass || '').trim();
+      const subject = form.subject.value.trim();
+      const teacher = form.teacher.value.trim();
+      const s = form.start.value;
+      const e = form.end.value;
+
+      if (!isValidClassName(cls)) return showToast('يرجى اختيار أو كتابة اسم فصل صحيح أولاً', 'error');
+      if (!subject || !s || !e) return showToast('يرجى إدخال اسم المادة ووقت البداية والنهاية', 'error');
+      if (parseMinutes(e) <= parseMinutes(s)) return showToast('يجب أن يكون وقت النهاية بعد وقت البداية', 'error');
+
+      await backend.db.push(`schedule/${cls}/${state.selectedDay}`, {
+        n: subject,
+        t: teacher,
+        s,
+        e
+      });
+      form.reset();
+      showToast('تمت إضافة الحصة للجدول');
+    }
+
+    async function handleDeleteLesson(cls, day, lessonId) {
+      if (!confirm('حذف هذه الحصة من الجدول؟')) return;
+      try {
+        await backend.db.remove(`schedule/${cls}/${day}/${lessonId}`);
+        showToast('تم حذف الحصة');
+      } catch (err) {
+        showToast(mapError(err), 'error');
+      }
+    }
+
+    async function handleAddHomework(form) {
+      const cls = form.cls.value.trim();
+      const subject = form.subject.value.trim();
+      const title = form.title.value.trim();
+      const dueStr = form.due.value;
+
+      if (!isValidClassName(cls)) return showToast('اسم الفصل غير صحيح', 'error');
+      if (!subject || !title || !dueStr) return showToast('جميع الحقول مطلوبة', 'error');
+
+      await backend.db.push('homework', {
+        cls,
+        subject,
+        title,
+        due: new Date(dueStr).getTime()
+      });
+      form.reset();
+      showToast('تمت إضافة الواجب بنجاح');
+    }
+
+    async function handleDeleteHomework(hwId) {
+      if (!confirm('هل تريد حذف هذا الواجب؟')) return;
+      try {
+        await backend.db.remove(`homework/${hwId}`);
+        showToast('تم حذف الواجب');
+      } catch (err) {
+        showToast(mapError(err), 'error');
+      }
+    }
+
+    async function handleToggleUserRole(targetUid, currentRole) {
+      if (targetUid === state.authUser.uid) {
+        return showToast('لا يمكنك تغيير صلاحية حسابك الشخصي', 'error');
+      }
+      const nextRole = currentRole === 'admin' ? 'student' : 'admin';
+      if (nextRole === 'student') {
+        const adminCount = Object.values(state.users).filter(u => u.role === 'admin').length;
+        if (adminCount <= 1) {
+          return showToast('يجب أن يبقى مدير واحد على الأقل في النظام', 'error');
+        }
+      }
+      try {
+        await backend.db.set(`users/${targetUid}/role`, nextRole);
+        showToast(nextRole === 'admin' ? 'تمت ترقية المستخدم إلى مدير' : 'تم تحويل المستخدم إلى طالب');
+      } catch (err) {
+        showToast(mapError(err), 'error');
+      }
+    }
+
+    /* ==========================================================================
+       7. VIEWS
+       ========================================================================== */
+    function renderAuthView() {
+      const isSignIn = state.authTab === 'signin';
+      return `
+        <div class="auth-wrapper">
+          <div class="auth-card">
+            <div class="brand-header">
+              <div class="brand-title">MY <span>School</span></div>
+              <div class="brand-tagline">مدرستي... بأيدينا</div>
+              <div class="brand-sponsor">تحت رعاية إيمان طاهر - الإشراف المدرسي</div>
+              <div class="mode-pill">
+                <span class="mode-dot"></span>
+                <span>الوضع: ${MODE === 'firebase' ? 'سحابي (Firebase)' : 'محلي للتجربة (Local)'}</span>
+              </div>
+            </div>
+
+            <div class="tabs" role="tablist">
+              <button type="button" class="tab-btn ${isSignIn ? 'active' : ''}" data-action="auth-tab" data-tab="signin">تسجيل الدخول</button>
+              <button type="button" class="tab-btn ${!isSignIn ? 'active' : ''}" data-action="auth-tab" data-tab="signup">حساب جديد</button>
+            </div>
+
+            ${isSignIn ? `
+              <form data-form="signin">
+                <div class="form-group">
+                  <label class="form-label" for="si-email">البريد الإلكتروني</label>
+                  <input id="si-email" name="email" type="email" class="form-control" required placeholder="name@school.edu" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="si-pass">كلمة السر</label>
+                  <input id="si-pass" name="password" type="password" class="form-control" required placeholder="••••••" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" ${state.busy ? 'disabled' : ''}>
+                  ${state.busy ? 'جاري الدخول...' : 'تسجيل الدخول'}
+                </button>
+                <div style="text-align:center;">
+                  <button type="button" class="link-btn" data-action="reset-password">نسيت كلمة السر؟</button>
+                </div>
+              </form>
+            ` : `
+              <form data-form="signup">
+                <div class="form-group">
+                  <label class="form-label" for="su-name">الاسم بالكامل</label>
+                  <input id="su-name" name="name" type="text" class="form-control" required maxlength="60" placeholder="مثال: أحمد محمود" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="su-email">البريد الإلكتروني</label>
+                  <input id="su-email" name="email" type="email" class="form-control" required placeholder="name@school.edu" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="su-class">الفصل الدراسي</label>
+                  <input id="su-class" name="className" type="text" class="form-control" required maxlength="30" placeholder="مثال: 3 / أ" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="su-pass">كلمة السر (6 أحرف على الأقل)</label>
+                  <input id="su-pass" name="password" type="password" class="form-control" required minlength="6" placeholder="••••••" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" ${state.busy ? 'disabled' : ''}>
+                  ${state.busy ? 'جاري إنشاء الحساب...' : 'إنشاء حساب جديد'}
+                </button>
+              </form>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    function getLessonsFor(cls, dayKey) {
+      const dayObj = state.schedule?.[cls]?.[dayKey] || {};
+      return Object.entries(dayObj)
+        .map(([id, item]) => ({ id, ...item }))
+        .sort((a, b) => parseMinutes(a.s) - parseMinutes(b.s));
+    }
+
+    function getVisibleHomework() {
+      const all = Object.entries(state.homework || {}).map(([id, hw]) => ({ id, ...hw }));
+      if (isAdmin()) return all;
+      return all.filter(hw => hw.cls === state.profile.className);
+    }
+
+    function renderHomeView() {
+      const prof = state.profile;
+      const firstName = (prof.name || '').trim().split(/\s+/)[0];
+      const todayKey = DAYS[new Date().getDay()].key;
+      const todayLessons = getLessonsFor(prof.className, todayKey);
+      const nowMin = getNowMinutes();
+
+      const currentLesson = todayLessons.find(l => nowMin >= parseMinutes(l.s) && nowMin < parseMinutes(l.e));
+      const visibleHw = getVisibleHomework();
+      const pendingHw = visibleHw.filter(h => !state.hwDone[h.id]).sort((a, b) => a.due - b.due);
+      const doneHw = visibleHw.filter(h => !!state.hwDone[h.id]);
+
+      const postsArr = Object.entries(state.posts || {})
+        .map(([id, p]) => ({ id, ...p }))
+        .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.ts - a.ts);
+      const latestPinned = postsArr.find(p => p.pinned) || postsArr[0];
+
+      return `
+        <div class="hero-card">
+          <div class="hero-top">
+            <div>
+              <div class="hero-greeting">أهلاً يا ${escapeHtml(firstName)} 👋</div>
+              <div class="hero-meta">
+                <span>${formatDateAr(Date.now())}</span>
+                <span>•</span>
+                <span>فصل: <strong>${escapeHtml(prof.className)}</strong></span>
+              </div>
+            </div>
+            ${currentLesson ? `
+              <span class="pill pill-yellow">الآن: ${escapeHtml(currentLesson.n)}</span>
+            ` : ''}
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">حصص النهاردة</div>
+            <div class="stat-value">${formatNumAr(todayLessons.length)}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">واجبات مطلوبة</div>
+            <div class="stat-value" style="color:var(--danger);">${formatNumAr(pendingHw.length)}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">واجبات مكتملة</div>
+            <div class="stat-value" style="color:var(--success);">${formatNumAr(doneHw.length)}</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">جدول حصص النهاردة</h2>
+              <button type="button" class="btn btn-ghost btn-sm" data-action="nav" data-route="schedule">الجدول الكامل</button>
+            </div>
+            ${todayLessons.length === 0 ? `
+              <div class="empty-state">مفيش حصص مسجّلة لفصلك النهاردة.</div>
+            ` : todayLessons.map((l, idx) => {
+              const sMin = parseMinutes(l.s);
+              const eMin = parseMinutes(l.e);
+              const isNow = nowMin >= sMin && nowMin < eMin;
+              const isDone = nowMin >= eMin;
+              return `
+                <div class="lesson-item ${isNow ? 'is-now' : ''} ${isDone ? 'is-done' : ''}">
+                  <div class="lesson-idx">${isDone ? ICONS.check : formatNumAr(idx + 1)}</div>
+                  <div class="lesson-info">
+                    <div class="lesson-subj">${escapeHtml(l.n)} ${isNow ? '<span class="pill pill-yellow" style="margin-right:6px;">شغالة دلوقتي</span>' : ''}</div>
+                    <div class="lesson-teacher">${l.t ? `أ/ ${escapeHtml(l.t)}` : 'بدون اسم معلم'}</div>
+                  </div>
+                  <div class="lesson-time">${escapeHtml(l.s)} - ${escapeHtml(l.e)}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">واجبات قادمة</h2>
+                <button type="button" class="btn btn-ghost btn-sm" data-action="nav" data-route="homework">كل الواجبات</button>
+              </div>
+              ${pendingHw.length === 0 ? `
+                <div class="empty-state">عاش! مفيش عليك أي واجبات دلوقتي.</div>
+              ` : pendingHw.slice(0, 4).map(hw => `
+                <div class="hw-item">
+                  <button type="button" class="hw-check" aria-label="تحديد كمكتمل" data-action="toggle-hw" data-id="${escapeHtml(hw.id)}"></button>
+                  <div class="hw-body">
+                    <span class="hw-subj">${escapeHtml(hw.subject)}</span>
+                    <div class="hw-title">${escapeHtml(hw.title)}</div>
+                    <div class="hw-meta">
+                      <span>التسليم: ${formatDateTimeAr(hw.due)}</span>
+                      ${hw.due < Date.now() ? '<span class="pill pill-danger">متأخر</span>' : ''}
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            ${latestPinned ? `
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">آخر إعلان مهم</h2>
+                  ${latestPinned.pinned ? '<span class="pill pill-yellow">مثبّت</span>' : ''}
+                </div>
+                <div class="post-title">${escapeHtml(latestPinned.title)}</div>
+                <div class="post-body" style="color:var(--text-muted);">${escapeHtml(latestPinned.body)}</div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPostsView() {
+      const postsArr = Object.entries(state.posts || {})
+        .map(([id, p]) => ({ id, ...p }))
+        .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.ts - a.ts);
+
+      return `
+        ${isAdmin() ? `
+          <div class="card">
+            <h2 class="card-title" style="margin-bottom:14px;">نشر إعلان جديد</h2>
+            <form data-form="create-post">
+              <div class="form-group">
+                <label class="form-label" for="post-title">عنوان الإعلان *</label>
+                <input id="post-title" name="title" type="text" class="form-control" required maxlength="120" placeholder="مثال: موعد امتحانات الشهر" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="post-body">التفاصيل</label>
+                <textarea id="post-body" name="body" class="form-control" maxlength="2000" placeholder="اكتب تفاصيل الإعلان هنا..."></textarea>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="pinned" />
+                  <span>تثبيت الإعلان في الأعلى</span>
+                </label>
+                <button type="submit" class="btn btn-primary" ${state.busy ? 'disabled' : ''}>نشر الإعلان</button>
+              </div>
+            </form>
+          </div>
+        ` : ''}
+
+        ${postsArr.length === 0 ? `
+          <div class="card empty-state">لا توجد إعلانات منشورة حالياً.</div>
+        ` : postsArr.map(p => `
+          <article class="post-card ${p.pinned ? 'pinned' : ''}">
+            <div class="post-head">
+              <div class="post-author">
+                <div class="avatar">${escapeHtml(getInitials(p.author))}</div>
+                <div>
+                  <div style="font-weight:800;">${escapeHtml(p.author)}</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">${formatDateTimeAr(p.ts)}</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                ${p.pinned ? '<span class="pill pill-yellow">مثبّت</span>' : ''}
+                ${isAdmin() ? `
+                  <button type="button" class="btn btn-ghost btn-sm" aria-label="تثبيت أو إلغاء التثبيت" data-action="toggle-pin" data-id="${escapeHtml(p.id)}" data-pinned="${p.pinned ? '1' : '0'}">
+                    ${ICONS.pin}
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm" aria-label="حذف الإعلان" data-action="delete-post" data-id="${escapeHtml(p.id)}">
+                    ${ICONS.trash}
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+            <h3 class="post-title">${escapeHtml(p.title)}</h3>
+            <div class="post-body">${escapeHtml(p.body)}</div>
+          </article>
+        `).join('')}
+      `;
+    }
+
+    function renderScheduleView() {
+      const knownClasses = new Set([
+        state.profile.className,
+        ...Object.keys(state.schedule || {}),
+        ...Object.values(state.users || {}).map(u => u.className)
+      ].filter(Boolean));
+
+      const activeClass = isAdmin() ? (state.selectedClass || state.profile.className) : state.profile.className;
+      const lessons = getLessonsFor(activeClass, state.selectedDay);
+
+      return `
+        ${isAdmin() ? `
+          <div class="card">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="sched-class-input">اختر أو اكتب الفصل لعرض وتعديل جدوله:</label>
+              <input id="sched-class-input" list="classes-datalist" class="form-control" value="${escapeHtml(activeClass)}" data-action="change-class" placeholder="مثال: 3 / أ" />
+              <datalist id="classes-datalist">
+                ${Array.from(knownClasses).map(c => `<option value="${escapeHtml(c)}"></option>`).join('')}
+              </datalist>
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="day-tabs" role="tablist">
+          ${DAYS.map(d => `
+            <button type="button" class="day-tab ${state.selectedDay === d.key ? 'active' : ''}" data-action="select-day" data-day="${d.key}">
+              ${d.label}
+            </button>
+          `).join('')}
+        </div>
+
+        ${isAdmin() ? `
+          <div class="card">
+            <h2 class="card-title" style="margin-bottom:14px;">إضافة حصة ليوم ${DAYS.find(d => d.key === state.selectedDay)?.label} (${escapeHtml(activeClass)})</h2>
+            <form data-form="add-lesson">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="ls-subj">اسم المادة *</label>
+                  <input id="ls-subj" name="subject" type="text" class="form-control" required placeholder="مثال: رياضيات" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="ls-teacher">اسم المعلم (اختياري)</label>
+                  <input id="ls-teacher" name="teacher" type="text" class="form-control" placeholder="مثال: أ. محمد علي" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="ls-start">من الساعة *</label>
+                  <input id="ls-start" name="start" type="time" class="form-control" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="ls-end">إلى الساعة *</label>
+                  <input id="ls-end" name="end" type="time" class="form-control" required />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" ${state.busy ? 'disabled' : ''}>إضافة الحصة</button>
+            </form>
+          </div>
+        ` : ''}
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">حصص يوم ${DAYS.find(d => d.key === state.selectedDay)?.label} — فصل ${escapeHtml(activeClass)}</h2>
+          </div>
+          ${lessons.length === 0 ? `
+            <div class="empty-state">لا توجد حصص مسجّلة في هذا اليوم.</div>
+          ` : lessons.map((l, i) => `
+            <div class="lesson-item">
+              <div class="lesson-idx">${formatNumAr(i + 1)}</div>
+              <div class="lesson-info">
+                <div class="lesson-subj">${escapeHtml(l.n)}</div>
+                <div class="lesson-teacher">${l.t ? `أ/ ${escapeHtml(l.t)}` : 'بدون اسم معلم'}</div>
+              </div>
+              <div class="lesson-time">${escapeHtml(l.s)} - ${escapeHtml(l.e)}</div>
+              ${isAdmin() ? `
+                <button type="button" class="btn btn-danger btn-sm" aria-label="حذف الحصة" data-action="delete-lesson" data-cls="${escapeHtml(activeClass)}" data-day="${state.selectedDay}" data-id="${escapeHtml(l.id)}">
+                  ${ICONS.trash}
+                </button>
+              ` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderHomeworkView() {
+      const visibleHw = getVisibleHomework();
+      const pending = visibleHw.filter(h => !state.hwDone[h.id]).sort((a, b) => a.due - b.due);
+      const completed = visibleHw.filter(h => !!state.hwDone[h.id]).sort((a, b) => b.due - a.due);
+
+      const renderHwCard = (hw, isDone) => `
+        <div class="hw-item ${isDone ? 'completed' : ''}">
+          <button type="button" class="hw-check ${isDone ? 'checked' : ''}" aria-label="${isDone ? 'إلغاء الإتمام' : 'تحديد كمكتمل'}" data-action="toggle-hw" data-id="${escapeHtml(hw.id)}">
+            ${isDone ? ICONS.check : ''}
+          </button>
+          <div class="hw-body">
+            <span class="hw-subj">${escapeHtml(hw.subject)}</span>
+            ${isAdmin() ? `<span class="pill pill-navy" style="margin-right:6px;">فصل: ${escapeHtml(hw.cls)}</span>` : ''}
+            <div class="hw-title">${escapeHtml(hw.title)}</div>
+            <div class="hw-meta">
+              <span>موعد التسليم: ${formatDateTimeAr(hw.due)}</span>
+              ${!isDone && hw.due < Date.now() ? '<span class="pill pill-danger">متأخر</span>' : ''}
+            </div>
+          </div>
+          ${isAdmin() ? `
+            <button type="button" class="btn btn-danger btn-sm" aria-label="حذف الواجب" data-action="delete-hw" data-id="${escapeHtml(hw.id)}">
+              ${ICONS.trash}
+            </button>
+          ` : ''}
+        </div>
+      `;
+
+      return `
+        ${isAdmin() ? `
+          <div class="card">
+            <h2 class="card-title" style="margin-bottom:14px;">إضافة واجب منزلي جديد</h2>
+            <form data-form="add-hw">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="hw-cls">الفصل *</label>
+                  <input id="hw-cls" name="cls" type="text" class="form-control" required value="${escapeHtml(state.profile.className)}" placeholder="مثال: 3 / أ" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="hw-subj">المادة *</label>
+                  <input id="hw-subj" name="subject" type="text" class="form-control" required placeholder="مثال: علوم" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="hw-title">عنوان / تفاصيل الواجب *</label>
+                  <input id="hw-title" name="title" type="text" class="form-control" required placeholder="حل تدريبات صفحة ٤٢" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="hw-due">آخر موعد للتسليم *</label>
+                  <input id="hw-due" name="due" type="datetime-local" class="form-control" required />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" ${state.busy ? 'disabled' : ''}>إضافة الواجب</button>
+            </form>
+          </div>
+        ` : ''}
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">الواجبات المطلوبة (${formatNumAr(pending.length)})</h2>
+          </div>
+          ${pending.length === 0 ? `
+            <div class="empty-state">مفيش واجبات مطلوبة حالياً!</div>
+          ` : pending.map(h => renderHwCard(h, false)).join('')}
+        </div>
+
+        <div class="card">
+          <details>
+            <summary>الواجبات المكتملة (${formatNumAr(completed.length)})</summary>
+            <div style="margin-top:12px;">
+              ${completed.length === 0 ? `
+                <div class="empty-state">لم تكمل أي واجب بعد.</div>
+              ` : completed.map(h => renderHwCard(h, true)).join('')}
+            </div>
+          </details>
+        </div>
+      `;
+    }
+
+    function renderAdminView() {
+      const usersList = Object.entries(state.users || {}).map(([uid, u]) => ({ uid, ...u }));
+      const totalPosts = Object.keys(state.posts || {}).length;
+      const totalHw = Object.keys(state.homework || {}).length;
+
+      return `
+        <div class="tabs" style="max-width:340px;">
+          <button type="button" class="tab-btn ${state.adminTab === 'users' ? 'active' : ''}" data-action="admin-tab" data-tab="users">المستخدمون</button>
+          <button type="button" class="tab-btn ${state.adminTab === 'stats' ? 'active' : ''}" data-action="admin-tab" data-tab="stats">إحصائيات</button>
+        </div>
+
+        ${state.adminTab === 'stats' ? `
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">إجمالي المستخدمين</div>
+              <div class="stat-value">${formatNumAr(usersList.length)}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">عدد الإعلانات</div>
+              <div class="stat-value">${formatNumAr(totalPosts)}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">عدد الواجبات</div>
+              <div class="stat-value">${formatNumAr(totalHw)}</div>
+            </div>
+          </div>
+        ` : `
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">إدارة المستخدمين والصلاحيات (${formatNumAr(usersList.length)})</h2>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>المستخدم</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>الفصل</th>
+                    <th>الصلاحية</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${usersList.map(u => {
+                    const isSelf = u.uid === state.authUser.uid;
+                    const uIsAdmin = u.role === 'admin';
+                    return `
+                      <tr>
+                        <td>
+                          <div style="display:flex; align-items:center; gap:10px;">
+                            <div class="avatar" style="width:34px; height:34px; font-size:0.82rem;">${escapeHtml(getInitials(u.name))}</div>
+                            <strong>${escapeHtml(u.name)}</strong>
+                          </div>
+                        </td>
+                        <td style="direction:ltr; text-align:right;">${escapeHtml(u.email)}</td>
+                        <td>${escapeHtml(u.className)}</td>
+                        <td>
+                          <span class="pill ${uIsAdmin ? 'pill-yellow' : 'pill-navy'}">
+                            ${uIsAdmin ? 'مدير' : 'طالب'}
+                          </span>
+                        </td>
+                        <td>
+                          ${isSelf ? '<span style="color:var(--text-muted); font-size:0.82rem;">حسابك الحالي</span>' : `
+                            <button type="button" class="btn ${uIsAdmin ? 'btn-danger' : 'btn-ghost'} btn-sm" data-action="toggle-role" data-uid="${escapeHtml(u.uid)}" data-role="${escapeHtml(u.role)}">
+                              ${uIsAdmin ? 'سحب الإدارة' : 'ترقية لمدير'}
+                            </button>
+                          `}
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `}
+      `;
+    }
+
+    function renderProfileView() {
+      const prof = state.profile;
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+      return `
+        <div class="card" style="max-width:640px; margin:0 auto;">
+          <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+            <div class="avatar" style="width:64px; height:64px; font-size:1.4rem;">${escapeHtml(getInitials(prof.name))}</div>
+            <div>
+              <h2 style="font-size:1.35rem; font-weight:800;">${escapeHtml(prof.name)}</h2>
+              <div style="color:var(--text-muted); direction:ltr; text-align:right;">${escapeHtml(prof.email)}</div>
+            </div>
+          </div>
+
+          <div class="kv-grid">
+            <div class="kv-tile">
+              <div class="kv-label">الفصل الدراسي</div>
+              <div class="kv-val">${escapeHtml(prof.className)}</div>
+            </div>
+            <div class="kv-tile">
+              <div class="kv-label">الدور / الصلاحية</div>
+              <div class="kv-val">${prof.role === 'admin' ? 'مدير المدرسة' : 'طالب'}</div>
+            </div>
+            <div class="kv-tile">
+              <div class="kv-label">المستوى الحالي</div>
+              <div class="kv-val">المستوى ${formatNumAr(calcLevel(prof.xp))}</div>
+            </div>
+            <div class="kv-tile">
+              <div class="kv-label">نقاط الخبرة (XP)</div>
+              <div class="kv-val" style="color:var(--success);">${formatNumAr(prof.xp || 0)} XP</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-bottom:18px;">
+            <div>
+              <strong>مظهر التطبيق</strong>
+              <div style="font-size:0.82rem; color:var(--text-muted);">التبديل بين الوضع الفاتح والداكن</div>
+            </div>
+            <button type="button" class="btn btn-ghost" data-action="toggle-theme">
+              ${isDark ? ICONS.sun : ICONS.moon}
+              <span>${isDark ? 'الوضع الفاتح' : 'الوضع الداكن'}</span>
+            </button>
+          </div>
+
+          <div style="font-size:0.82rem; color:var(--text-muted); margin-bottom:18px;">
+            وضع الاتصال بقاعدة البيانات: <strong>${MODE === 'firebase' ? 'Firebase Realtime Database' : 'Local Storage Mode'}</strong>
+          </div>
+
+          <button type="button" class="btn btn-danger btn-block" data-action="signout">تسجيل الخروج</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       8. SHELL & RENDER ENGINE
+       ========================================================================== */
+    function render() {
+      const root = document.getElementById('app');
+
+      if (!state.authReady) {
+        root.innerHTML = `<div class="loader-screen"><div class="spinner"></div><div>جاري تحميل MY School...</div></div>`;
+        return;
+      }
+
+      if (!state.authUser) {
+        root.innerHTML = renderAuthView();
+        return;
+      }
+
+      if (!state.profile) {
+        root.innerHTML = `
+          <div class="loader-screen">
+            ${state.listenerErrors.length > 0 ? `
+              <div class="error-banner" style="max-width:480px;">
+                <div>${escapeHtml(state.listenerErrors[0].msg)}</div>
+                <button type="button" class="btn btn-danger btn-sm" data-action="signout">تسجيل الخروج</button>
+              </div>
+            ` : `
+              <div class="spinner"></div>
+              <div>جاري تحميل بيانات الحساب...</div>
+              <button type="button" class="btn btn-ghost btn-sm" data-action="signout" style="margin-top:12px;">تسجيل الخروج</button>
+            `}
+          </div>
+        `;
+        return;
+      }
+
+      const navItems = [
+        { id: 'home', label: 'الرئيسية', icon: ICONS.home },
+        { id: 'posts', label: 'الإعلانات', icon: ICONS.bell },
+        { id: 'schedule', label: 'الجدول', icon: ICONS.calendar },
+        { id: 'homework', label: 'الواجبات', icon: ICONS.book },
+        ...(isAdmin() ? [{ id: 'admin', label: 'الإدارة', icon: ICONS.shield }] : []),
+        { id: 'profile', label: 'حسابي', icon: ICONS.user }
+      ];
+
+      if (state.route === 'admin' && !isAdmin()) state.route = 'home';
+
+      const currentNav = navItems.find(n => n.id === state.route) || navItems[0];
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+      let viewHtml = '';
+      if (state.route === 'home') viewHtml = renderHomeView();
+      else if (state.route === 'posts') viewHtml = renderPostsView();
+      else if (state.route === 'schedule') viewHtml = renderScheduleView();
+      else if (state.route === 'homework') viewHtml = renderHomeworkView();
+      else if (state.route === 'admin') viewHtml = renderAdminView();
+      else if (state.route === 'profile') viewHtml = renderProfileView();
+
+      root.innerHTML = `
+        <div class="app-shell">
+          <aside class="sidebar" aria-label="القائمة الرئيسية">
+            <div class="sidebar-brand">
+              <div class="brand-title">MY <span>School</span></div>
+              <div class="brand-tagline">مدرستي... بأيدينا</div>
+            </div>
+            <nav class="nav-list">
+              ${navItems.map(item => `
+                <button type="button" class="nav-btn ${state.route === item.id ? 'active' : ''}" data-action="nav" data-route="${item.id}">
+                  ${item.icon}
+                  <span>${item.label}</span>
+                </button>
+              `).join('')}
+            </nav>
+            <div class="sidebar-user">
+              <div class="avatar">${escapeHtml(getInitials(state.profile.name))}</div>
+              <div class="sidebar-user-info">
+                <div class="sidebar-user-name">${escapeHtml(state.profile.name)}</div>
+                <div class="sidebar-user-role">${isAdmin() ? 'مدير المدرسة' : `طالب • مستوى ${formatNumAr(calcLevel(state.profile.xp))}`}</div>
+              </div>
+            </div>
+          </aside>
+
+          <div class="main-area">
+            <header class="topbar">
+              <h1 class="page-title">${currentNav.label}</h1>
+              <div class="topbar-actions">
+                <button type="button" class="icon-btn" aria-label="تبديل المظهر" data-action="toggle-theme">
+                  ${isDark ? ICONS.sun : ICONS.moon}
+                </button>
+              </div>
+            </header>
+
+            <main class="content-container">
+              ${state.listenerErrors.map(e => `
+                <div class="error-banner" role="alert">
+                  <div><strong>خطأ في المزامنة:</strong> ${escapeHtml(e.msg)}</div>
+                  <button type="button" class="btn btn-danger btn-sm" data-action="signout">تسجيل الخروج</button>
+                </div>
+              `).join('')}
+
+              ${viewHtml}
+            </main>
+          </div>
+
+          <nav class="bottom-nav" aria-label="شريط التنقل السفلي">
+            ${navItems.map(item => `
+              <button type="button" class="nav-btn ${state.route === item.id ? 'active' : ''}" data-action="nav" data-route="${item.id}">
+                ${item.icon}
+                <span>${item.label}</span>
+              </button>
+            `).join('')}
+          </nav>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       9. EVENT DELEGATION & TIMERS
+       ========================================================================== */
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+
+      const action = btn.dataset.action;
+      if (action === 'toggle-theme') toggleTheme();
+      else if (action === 'auth-tab') {
+        state.authTab = btn.dataset.tab;
+        render();
+      } else if (action === 'nav') {
+        state.route = btn.dataset.route;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (action === 'admin-tab') {
+        state.adminTab = btn.dataset.tab;
+        render();
+      } else if (action === 'select-day') {
+        state.selectedDay = btn.dataset.day;
+        render();
+      } else if (action === 'toggle-hw') {
+        await handleToggleHomework(btn.dataset.id);
+      } else if (action === 'toggle-pin') {
+        await handleTogglePin(btn.dataset.id, btn.dataset.pinned === '1');
+      } else if (action === 'delete-post') {
+        await handleDeletePost(btn.dataset.id);
+      } else if (action === 'delete-lesson') {
+        await handleDeleteLesson(btn.dataset.cls, btn.dataset.day, btn.dataset.id);
+      } else if (action === 'delete-hw') {
+        await handleDeleteHomework(btn.dataset.id);
+      } else if (action === 'toggle-role') {
+        await handleToggleUserRole(btn.dataset.uid, btn.dataset.role);
+      } else if (action === 'signout') {
+        await backend.auth.signOut();
+        showToast('تم تسجيل الخروج');
+      } else if (action === 'reset-password') {
+        const emailInput = document.getElementById('si-email');
+        const email = emailInput ? emailInput.value.trim() : '';
+        if (!email) return showToast('اكتب بريدك الإلكتروني أولاً في خانة البريد', 'error');
+        try {
+          await backend.auth.reset(email);
+          showToast('تم إرسال رابط إعادة تعيين كلمة السر إلى بريدك الإلكتروني');
+        } catch (err) {
+          showToast(mapError(err), 'error');
+        }
+      }
+    });
+
+    document.addEventListener('change', (e) => {
+      const target = e.target.closest('[data-action="change-class"]');
+      if (target) {
+        state.selectedClass = target.value.trim();
+        render();
+      }
+    });
+
+    document.addEventListener('submit', async (e) => {
+      const form = e.target.closest('form[data-form]');
+      if (!form) return;
+      e.preventDefault();
+      if (state.busy) return;
+
+      const type = form.dataset.form;
+      state.busy = true;
+      render();
+
+      try {
+        if (type === 'signin') {
+          await backend.auth.signIn(form.email.value.trim(), form.password.value);
+          showToast('مرحباً بعودتك!');
+        } else if (type === 'signup') {
+          const name = form.name.value.trim();
+          const email = form.email.value.trim();
+          const className = form.className.value.trim();
+          const password = form.password.value;
+
+          if (!name) throw new Error('يرجى إدخال الاسم بالكامل.');
+          if (!isValidClassName(className)) throw new Error('اسم الفصل غير صحيح (مثال: 3 / أ).');
+
+          await backend.auth.signUp(email, password, { name, className });
+          showToast('تم إنشاء حسابك بنجاح!');
+        } else if (type === 'create-post') {
+          await handleCreatePost(form);
+        } else if (type === 'add-lesson') {
+          await handleAddLesson(form);
+        } else if (type === 'add-hw') {
+          await handleAddHomework(form);
+        }
+      } catch (err) {
+        showToast(mapError(err), 'error');
+      } finally {
+        state.busy = false;
+        render();
+      }
+    });
+
+    // Refresh "now" lesson badge every minute on the dashboard
+    setInterval(() => {
+      if (state.authUser && state.profile && state.route === 'home') {
+        render();
+      }
+    }, 60000);
+
+    // Boot
+    initTheme();
+    render();
+  </script>
+</body>
+</html>
